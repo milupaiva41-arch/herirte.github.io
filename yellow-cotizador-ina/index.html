@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yellowin cotizador ina</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: #fffaf0; color:#0b1320;
+           display:flex; align-items:center; justify-content:center; height:100vh; margin:0; padding:20px; }
+    .card { width:100%; max-width:420px; background:#ffffff; border-radius:16px; box-shadow:0 6px 30px rgba(11,19,32,0.06); padding:24px; }
+    h1 { margin:0 0 12px 0; font-size:20px; color:#ffcc00; text-align:center; }
+    label { display:block; font-size:14px; margin:12px 0 6px; }
+    input[type="number"] { width:100%; padding:12px; font-size:16px; border-radius:8px; border:1px solid #e6e6e6; box-sizing:border-box; }
+    .result { margin-top:18px; font-size:18px; font-weight:600; text-align:center; }
+    .note { margin-top:14px; font-size:13px; color:#333; text-align:center; background:#fff6d6; padding:8px; border-radius:8px; }
+    .btn { margin-top:12px; display:block; width:100%; padding:10px; border-radius:10px; border:none; font-weight:600; cursor:pointer; background:#ffcc00; }
+  </style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Yellowin cotizador ina</h1>
+
+    <label for="idr">Monto en rupias Indonesia (IDR)</label>
+    <input id="idr" type="number" inputmode="decimal" placeholder="Ej: 10000" value="10000" />
+
+    <button class="btn" id="convert">Convertir</button>
+
+    <div class="result" id="result" aria-live="polite"></div>
+
+    <div class="note">precios en pesos, no incluye fees</div>
+  </div>
+
+  <script>
+    const RATE = 0.1012;
+    const idrInput = document.getElementById('idr');
+    const resultDiv = document.getElementById('result');
+    const btn = document.getElementById('convert');
+
+    function formatARS(n) {
+      return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 2 }).format(n);
+    }
+
+    function convertAndShow() {
+      const idr = parseFloat(idrInput.value || 0);
+      if (isNaN(idr)) {
+        resultDiv.textContent = 'Introduce un número válido.';
+        return;
+      }
+      const ars = idr * RATE;
+      resultDiv.textContent = `${idr.toLocaleString('es-AR')} IDR = ${formatARS(ars)}`;
+    }
+
+    convertAndShow();
+
+    btn.addEventListener('click', convertAndShow);
+    idrInput.addEventListener('keydown', function(e){
+      if (e.key === 'Enter') convertAndShow();
+    });
+  </script>
+</body>
+</html>
